@@ -62,6 +62,8 @@ A little description of the classes of the algorithm are given below:
 
 We can conclude that the meta-heuristics are very useful to solve very complex problems with a low cost and time consumption. And even using a very simple implementation of the ACO without any extension cited above, the results were very significant showing a good aproximation of the best solution cost cited in the TSP site.
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=q11W1ZERSYk" target="_blank"><img src="https://img.youtube.com/vi/q11W1ZERSYk/0.jpg" alt="ACO for TSP in Java" width="612" height="459" border="10" /></a>
+
 ## References
 
 [TSP Library](https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/)

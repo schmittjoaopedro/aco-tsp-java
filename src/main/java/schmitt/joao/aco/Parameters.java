@@ -12,8 +12,6 @@ public class Parameters {
 
     public static int NNSize = 20;
 
-    public static int iterationsMax = 300;
-
-    public static long time = 2000;
+    public static int iterationsMax = 1000;
 
 }

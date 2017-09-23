@@ -1,15 +1,38 @@
 package schmitt.joao.aco;
 
+/**
+ * Represents the ant agent. It process their own state transition rules in the environment.
+ */
 public class Ant {
 
+    /**
+     * Cost of the current path, it is the sum of all edges distances.
+     */
     private double tourCost;
 
+    /**
+     * Current tour, contains a sequence of edges that was travelled by the ant.
+     * Start at the first node and ends at the same node, ex: [A,B,C,D,E,A].
+     */
     private int[] tour;
 
+    /**
+     * All nodes that were visited by the ant. Are the restrictions of the TSP problem,
+     * where an ant must visit all vertices only one time in a travel.
+     */
     private boolean[] visited;
 
+    /**
+     * Let the information about the edges, vertices and pheromones accessible.
+     */
     private Environment environment;
 
+    /**
+     * Create an adapted ant to the environment.
+     *
+     * @param tourSize
+     * @param environment
+     */
     public Ant(int tourSize, Environment environment) {
         super();
         this.tour = new int[tourSize + 1];
@@ -17,6 +40,12 @@ public class Ant {
         this.environment = environment;
     }
 
+    /**
+     * Calculate the travel cost where in each vertex the ant choose the
+     * most near neighbor still not visited starting in a random vertex.
+     *
+     * @return cost
+     */
     public double calculateNearestNeighborTour() {
         int phase = 0;
         clearVisited();
@@ -25,18 +54,25 @@ public class Ant {
             phase++;
             goToBestNext(phase);
         }
-        tour[environment.getNodesSize()] = tour[0];
-        tourCost = computeTourCost();
+        finishTourCircuit();
         clearVisited();
         return this.tourCost;
     }
 
+    /**
+     * Reset the ant to be processed.
+     */
     public void clearVisited() {
         for (int i = 0; i < visited.length; i++) {
             visited[i] = false;
         }
     }
 
+    /**
+     * Put the ant in a random vertex and mark it as visited.
+     *
+     * @param phase
+     */
     public void startAtRandomPosition(int phase) {
         tour[phase] = (int) (Math.random() * environment.getNodesSize());
         visited[tour[phase]] = true;
@@ -56,6 +92,12 @@ public class Ant {
         visited[nextCity] = true;
     }
 
+    /**
+     * Sum all the (i->i+1) edges cost of the tour. The last vertex (n - 1)
+     * reconnect with the first vertex (n), where vertex n is equal to vertex 0.
+     *
+     * @return tourCost
+     */
     public double computeTourCost() {
         double tourCost = 0.0;
         for (int i = 0; i < environment.getNodesSize(); i++) {
@@ -64,6 +106,10 @@ public class Ant {
         return tourCost;
     }
 
+    /**
+     * Finish the ant circuit, bind the last vertex with first vertex (last vertex
+     * n is equal to vertex 0) and calculate the route cost.
+     */
     public void finishTourCircuit() {
         tour[environment.getNodesSize()] = tour[0];
         tourCost = computeTourCost();

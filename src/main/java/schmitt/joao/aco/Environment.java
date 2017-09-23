@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Represent the solution space. Contains the vertex and edges
+ * of the graph to be optimized and the pheromone let by the ants.
+ */
 public class Environment {
 
     private double initialTrail;
@@ -23,27 +27,40 @@ public class Environment {
         this.graph = graph;
     }
 
+    /**
+     * Create a list with the nn nearest neighbors of each vertex and
+     * keep they in a separate structure of dimension n x nn where
+     * n = population size, and nn = nearest neighbors size.
+     */
     public void generateNearestNeighborList() {
         NNList = new int[getNodesSize()][getNNSize()];
+        // For each node of the graph, sort the nearest neighbors by distance
+        // and cut the list by the size nn.
         for(int i = 0; i < getNodesSize(); i++) {
-            Integer[] index = new Integer[getNodesSize()];
-            Double[] data = new Double[getNodesSize()];
+            Integer[] nodeIndex = new Integer[getNodesSize()];
+            Double[] nodeData = new Double[getNodesSize()];
             for(int j = 0; j < getNodesSize(); j++) {
-                index[j] = j;
-                data[j] = getCost(i, j);
+                nodeIndex[j] = j;
+                nodeData[j] = getCost(i, j);
             }
-            data[i] = Collections.max(Arrays.asList(data));
-            Arrays.sort(index, new Comparator<Integer>() {
+            // The edge of the current vertex with himself is let as last
+            // option to be selected to nearest neighbors list
+            nodeData[i] = Collections.max(Arrays.asList(nodeData));
+            Arrays.sort(nodeIndex, new Comparator<Integer>() {
                 public int compare(final Integer o1, final Integer o2) {
-                    return Double.compare(data[o1], data[o2]);
+                    return Double.compare(nodeData[o1], nodeData[o2]);
                 }
             });
             for(int r = 0; r < getNNSize(); r++) {
-                NNList[i][r] = index[r];
+                NNList[i][r] = nodeIndex[r];
             }
         }
     }
 
+    /**
+     * Create a population of k ants to search solutions in the environment,
+     * where k is the number of ants.
+     */
     public void generateAntPopulation() {
         ants = new Ant[getAntPopSize()];
         for(int k = 0; k < getAntPopSize(); k++) {
@@ -51,6 +68,15 @@ public class Environment {
         }
     }
 
+    /**
+     * Create pheromone and choice info structure:
+     * -> Pheromone is used to represent the quality of the edges used to build solutions.
+     * -> ChoiceInfo is calculated with the pheromone and the quality of routes, to be
+     *    used by the ants as decision rule and index to speed up the algorithm.
+     *
+     * To generate the environment the pheromone is initialized taken in account the cost
+     * of the nearest neighbor tour.
+     */
     public void generateEnvironment() {
         pheromone = new double[getNodesSize()][getNodesSize()];
         choiceInfo = new double[getNodesSize()][getNodesSize()];
@@ -66,6 +92,12 @@ public class Environment {
         calculateChoiceInformation();
     }
 
+    /**
+     * Calculate the proportional probability of an ant at vertex i select a neighbor
+     * j based on the (i->j) edge cost (taken the inverse cost of the edge) and
+     * (i->j) edge pheromone amount. The parameters alpha and beta control the
+     * balance between heuristic and pheromone.
+     */
     public void calculateChoiceInformation() {
         for(int i = 0; i < getNodesSize(); i++) {
             for(int j = 0; j < i; j++) {
@@ -76,18 +108,26 @@ public class Environment {
         }
     }
 
+    /**
+     * Put each ant to construct a solution in the environment.
+     */
     public void constructSolutions() {
+        // At the first step reset all ants (clearVisited) and put each one
+        // in a random vertex of the graph.
         int phase = 0;
         for(int k = 0; k < getAntPopSize(); k++) {
             ants[k].clearVisited();
             ants[k].startAtRandomPosition(phase);
         }
+        // Make all ants choose the next non visited vertex based in the
+        // pheromone trails and heuristic of the edge cost.
         while(phase < getNodesSize() - 1) {
             phase++;
             for(int k = 0; k < getAntPopSize(); k++) {
                 ants[k].goToNNListAsDecisionRule(phase);
             }
         }
+        // Close the circuit and calculate the total cost
         for(int k = 0; k < getAntPopSize(); k++) {
             ants[k].finishTourCircuit();
         }
@@ -120,6 +160,11 @@ public class Environment {
         }
     }
 
+    /**
+     * Return the number of nodes
+     *
+     * @return graphLength
+     */
     public int getNodesSize() {
         return graph.length;
     }

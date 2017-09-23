@@ -17,11 +17,11 @@ The communication between ants is made indirect by stigmergy with the environmen
 
 ![alt text](http://mute-net.sourceforge.net/images/ants/antDiagram3.png "Ant system")
 
-## Canonical from of Ant Colony Optimization (ACO)
+## Canonical Ant Colony Optimization (ACO) algorithm
 
 Meanwhile, a good number of improvements were inserted in the ants system (AS) with extensions as elitism, ranking, bounding, etc. Nevertheless, the most important development is the description of the Ant Colony Optimization Metaheuristic by Dorigo and Di Caro. The canonical main part of the algorithm is given below:
 
-**1. Pseudo-code for Ant Colony Optimization**
+**Algorithm 1 - Pseudo-code for Ant Colony Optimization**
 ```
 Initialize parameters
 Initialize pheromone trails
@@ -44,11 +44,28 @@ ACO algorithm have some building blocks that need to be understanded, and in som
 * Parameters values
 * Termination condition
 
-## How to used
+## How to use
+
+The project was constructed with maven, so to see the code working just open the project in your favorite Java IDE and run the main class (Program.java). Note that the main classe is pointing to the path of the tsp folder inside the repository, so take care for that the path is configured correctly.
+
+A little description of the classes of the algorithm are given below:
+
+* Ant: Model an ant, has the current state of the ants (tour information) and has the logic to process the state transition.
+* Environment: Model the environment, contains the information about the graph and the pheromone deposited by the ants.
+* Parameters: Contains the global parameters used by the ACO
+* Program: call the main building blocks of the ACO (Algorithm 1).
+* Statistics: calculate the algorithm evolution statistics, ex: best tour found.
+* TspReader: create a instance of the TSP problem.
+* Visualizer: plot a graph with the vertices and edges showing the best tour found.
 
 ## Conclusions
 
+We can conclude that the meta-heuristics are very useful to solve very complex problems with a low cost and time consumption. And even using a very simple implementation of the ACO without any extension cited above, the results were very significant showing a good aproximation of the best solution cost cited in the TSP site.
+
 ## References
+
+[TSP Library](https://www.iwr.uni-heidelberg.de/groups/comopt/software/TSPLIB95/)
+
 [Travelling Salmesman Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
 
 [Ant Colony Optimization: a literature survey](http://wps.fep.up.pt/wps/wp474.pdf)

@@ -5,6 +5,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Thanks: https://github.com/phil8192/tsp-java
+ * Class directory: https://github.com/phil8192/tsp-java/blob/master/src/main/java/net/parasec/tsp/TSPReader.java
+ */
 public class TspReader {
 
 

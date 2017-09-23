@@ -78,16 +78,26 @@ public class Ant {
         visited[tour[phase]] = true;
     }
 
+    /**
+     * Move to the neighbor of the current vertex with the smaller distance
+     *
+     * @param phase
+     */
     public void goToBestNext(int phase) {
+        // Start considering the last move
         int nextCity = environment.getNodesSize();
+        // Take the current city
         int currentCity = tour[phase - 1];
+        // Start with a value that an edge never will achieve
         double minDistance = Double.MAX_VALUE;
+        // For each non visited vertex, if the cost is lesser than minDistance select it
         for (int city = 0; city < environment.getNodesSize(); city++) {
             if (!visited[city] && environment.getCost(currentCity, city) < minDistance) {
                 nextCity = city;
                 minDistance = environment.getCost(currentCity, city);
             }
         }
+        // Move to the next city
         tour[phase] = nextCity;
         visited[nextCity] = true;
     }
@@ -115,10 +125,22 @@ public class Ant {
         tourCost = computeTourCost();
     }
 
+    /**
+     * Calculate next neighbor tending probabilistically selecting the edge
+     * with more pheromone and smaller distance. First is tried to find
+     * a vector to move in the nearest neighbor list, but if all vectors were visited
+     * then is selected the best in all remaining neighbors
+     *
+     * @param phase
+     */
     public void goToNNListAsDecisionRule(int phase) {
+        // Get the current city
         int currentCity = this.tour[phase - 1];
         double sumProbabilities = 0.0;
+        // Vector of nearest neighbor probabilities proportional to the fitness of the edge
         double[] selectionProbabilities = new double[environment.getNNSize() + 1];
+        // For each nearest neighbor vertex that was not visited yet add their fitness to the
+        // probability vector
         for(int j = 0; j < environment.getNNSize(); j++) {
             if(visited[environment.getNNNode(currentCity, j)]) {
                 selectionProbabilities[j] = 0.0;
@@ -128,30 +150,44 @@ public class Ant {
             }
         }
         if(sumProbabilities <= 0) {
+            // If all nearest neighbor were visited select on best in the remaining neighbors
             goToBestNext(phase);
         } else {
+            // Take a random value proportional to the sum of probabilities
             double rand = Math.random() * sumProbabilities;
             int j = 0;
             double probability = selectionProbabilities[j];
+            // Selected the neighbor correspondent to the random proportional probability
             while(probability <= rand) {
                 j++;
                 probability += selectionProbabilities[j];
             }
+            // If has problem with double round occurred
             if(j == environment.getNNSize()) {
+                // Select the best neighbor
                 goToBestNeighbor(phase);
                 return;
             }
+            // Visit the selected neighbor
             tour[phase] = environment.getNNNode(currentCity, j);
             visited[this.tour[phase]] = true;
         }
     }
 
+    /**
+     * Select the best non visited neighbor of the current vertex (the best neighbor
+     * have the greater fitness calculated from pheromone and heuristic).
+     * @param phase
+     */
     public void goToBestNeighbor(int phase) {
         int helpCity;
         int nextCity = environment.getNodesSize();
+        // Take the current city
         int currentCity = this.tour[phase - 1];
+        // Start the best with a value that never will be achieved
         double valueBest = -1.0;
         double help;
+        // Select the non visited neighbor with the maximum fitness
         for(int i = 0; i < environment.getNNSize(); i++) {
             helpCity = environment.getNNNode(currentCity, i);
             if(!this.visited[helpCity]) {
@@ -163,22 +199,40 @@ public class Ant {
             }
         }
         if(nextCity == environment.getNodesSize()) {
+            // If was not found a vertex at the nearest neighbor list of the current vector
             goToBestNext(phase);
         } else {
+            // Move to the vertex
             tour[phase] = nextCity;
             visited[this.tour[phase]] = true;
         }
     }
 
+    /**
+     * Return the cost of the current tour
+     *
+     * @return tourCost
+     */
     public double getTourCost() {
         return tourCost;
     }
 
+    /**
+     * Return the vertex for a specific phase of the travel
+     *
+     * @param phase
+     * @return vertex
+     */
     public int getRoutePhase(int phase) {
         return tour[phase];
     }
 
+    /**
+     * Return the current tour
+     * @return tour
+     */
     public int[] getTour() {
         return tour;
     }
+
 }

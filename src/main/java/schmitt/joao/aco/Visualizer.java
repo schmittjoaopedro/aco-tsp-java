@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * Thanks: http://www1.cs.columbia.edu/~bert/courses/3137/hw3_files/GraphDraw.java
+ */
 public class Visualizer extends JFrame {
 
     int viewWidth;
@@ -75,37 +78,32 @@ public class Visualizer extends JFrame {
         }
     }
 
+    // Add a node at pixel (x,y)
     public void addNode(String name, int x, int y) {
-        //add a node at pixel (x,y)
         nodes.add(new Node(name,x,y));
     }
+
+    // Add an edge between nodes i and j
     public void addEdge(int i, int j) {
-        //add an edge between nodes i and j
         edges.add(new edge(i,j));
     }
 
-    public void paint(Graphics g) { // draw the nodes and edges
+    // Clear and repaint the nodes and edges
+    public void paint(Graphics g) {
         super.paint(g);
         FontMetrics f = g.getFontMetrics();
         int nodeHeight = Math.max(height, f.getHeight());
-
         g.setColor(Color.black);
         for (edge e : edges) {
-            g.drawLine(nodes.get(e.i).x, nodes.get(e.i).y,
-                    nodes.get(e.j).x, nodes.get(e.j).y);
+            g.drawLine(nodes.get(e.i).x, nodes.get(e.i).y, nodes.get(e.j).x, nodes.get(e.j).y);
         }
-
         for (Node n : nodes) {
             int nodeWidth = Math.max(width, f.stringWidth(n.name)+width/2);
             g.setColor(Color.white);
-            g.fillOval(n.x-nodeWidth/2, n.y-nodeHeight/2,
-                    nodeWidth, nodeHeight);
+            g.fillOval(n.x-nodeWidth/2, n.y-nodeHeight/2, nodeWidth, nodeHeight);
             g.setColor(Color.black);
-            g.drawOval(n.x-nodeWidth/2, n.y-nodeHeight/2,
-                    nodeWidth, nodeHeight);
-
-            g.drawString(n.name, n.x-f.stringWidth(n.name)/2,
-                    n.y+f.getHeight()/2);
+            g.drawOval(n.x-nodeWidth/2, n.y-nodeHeight/2, nodeWidth, nodeHeight);
+            g.drawString(n.name, n.x-f.stringWidth(n.name)/2,n.y+f.getHeight()/2);
         }
     }
 }

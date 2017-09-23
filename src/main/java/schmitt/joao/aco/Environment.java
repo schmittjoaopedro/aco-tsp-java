@@ -10,18 +10,42 @@ import java.util.Comparator;
  */
 public class Environment {
 
+    /**
+     * Value for the initial amount of pheromone
+     */
     private double initialTrail;
 
+    /**
+     * The graph problem matrix to be solved of NxN
+     */
     private double[][] graph;
 
+    /**
+     * The matrix of NxNN nearest neighbor for each vertex of the graph
+     */
     private int[][] NNList;
 
+    /**
+     * The matrix of NxN indicating the pheromone deposited by the ants
+     */
     private double[][] pheromone;
 
+    /**
+     * The matrix of NxN storing the value of the best edges calculated using
+     * the pheromone amount and the quality of the edges (smaller distances).
+     */
     private double[][] choiceInfo;
 
+    /**
+     * The ants agent
+     */
     private Ant[] ants;
 
+    /**
+     * Environment requires a graph to solve
+     *
+     * @param graph
+     */
     public Environment(double[][] graph) {
         super();
         this.graph = graph;
@@ -133,6 +157,10 @@ public class Environment {
         }
     }
 
+    /**
+     * Update the pheromone taking into account the quality of the solutions build
+     * by the ants and the evaporation rate
+     */
     public void updatePheromone() {
         evaporatePheromone();
         for(int k = 0; k < getAntPopSize(); k++) {
@@ -141,6 +169,10 @@ public class Environment {
         calculateChoiceInformation();
     }
 
+    /**
+     * Evaporate the amount of pheromone by a exponential factor (1 - rho)
+     * for all edges
+     */
     public void evaporatePheromone() {
         for(int i = 0; i < getNodesSize(); i++) {
             for(int j = i; j < getNodesSize(); j++) {
@@ -150,6 +182,12 @@ public class Environment {
         }
     }
 
+    /**
+     * For the ant, deposit the amount of pheromone in all edges used in the ant where
+     * the amount of pheromone deposited is proportional to the solution quality
+     *
+     * @param ant
+     */
     public void depositPheromone(Ant ant) {
         double dTau = 1.0 / ant.getTourCost();
         for(int i = 0; i < getNodesSize(); i++) {
@@ -169,24 +207,60 @@ public class Environment {
         return graph.length;
     }
 
+    /**
+     * Return the size of nearest neighbor list
+     *
+     * @return nnSize
+     */
     public int getNNSize() { return Parameters.NNSize; }
 
+    /**
+     * Return the distance between to vertices
+     *
+     * @param from
+     * @param to
+     * @return cost
+     */
     public double getCost(int from, int to) {
         return graph[from][to];
     }
 
+    /**
+     * Return the ant population size
+     *
+     * @return antPopSize
+     */
     public int getAntPopSize() {
         return Parameters.antPopSize;
     }
 
-    public int getNNNode(int from, int to) {
-        return this.NNList[from][to];
+    /**
+     * Return the nearest neighbor of the index rank position
+     *
+     * @param from
+     * @param index
+     * @return targetVertex
+     */
+    public int getNNNode(int from, int index) {
+        return this.NNList[from][index];
     }
 
+    /**
+     * Return the heuristic-pheromone value of the edge
+     *
+     * @param from
+     * @param to
+     * @return costInfo
+     */
     public double getCostInfo(int from, int to) {
         return choiceInfo[from][to];
     }
 
+    /**
+     * Return the ant array
+     *
+     * @return ants
+     */
     public Ant[] getAnts() {
         return ants;
     }

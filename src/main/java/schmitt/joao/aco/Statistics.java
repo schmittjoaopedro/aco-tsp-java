@@ -1,23 +1,48 @@
 package schmitt.joao.aco;
 
 /**
- * Created by root on 21/09/17.
+ * Calculate the statistics of the algorithm evolution
  */
 public class Statistics {
 
+    /**
+     * Environment to be analysed
+     */
     private Environment environment;
 
+    /**
+     * The cost of the best so far tour
+     */
     private double bestSoFar = Double.MAX_VALUE;
 
+    /**
+     * The route of the best so far tour
+     */
     private int[] bestTourSoFar;
 
+    /**
+     * A swing component to visualize graphically the algorithm evolution
+     */
     private Visualizer visualizer;
 
+    /**
+     * Needs an environment and the coordinates of the vertices to be drawn
+     *
+     * @param environment
+     * @param coordinates
+     */
     public Statistics(Environment environment, double[][] coordinates) {
         this.environment = environment;
         this.visualizer = new Visualizer(coordinates);
     }
 
+    /**
+     * For each iteration get the best, the worst and the mean tour cost
+     * of all tours constructed by the ants, if a improvement was detected
+     * show show the values.
+     *
+     * @param phase
+     */
     public void calculateStatistics(int phase) {
         double min = Double.MAX_VALUE;
         double max = Double.MIN_VALUE;
@@ -46,10 +71,6 @@ public class Statistics {
             visualizer.draw(bestTourSoFar);
             try { Thread.sleep(1000); } catch (Exception ex) {}
         }
-    }
-
-    public int[] getBestTourSoFar() {
-        return bestTourSoFar;
     }
 
 }

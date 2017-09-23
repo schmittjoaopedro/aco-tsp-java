@@ -11,6 +11,12 @@ The following image is an example of the TSP problem resolved:
 
 ## Ant Colony Optimization (ACO)
 
+Ant colony optimization is a meta-heuristic used to solve complex discret problems, normally used to search good solutions in graph systems. The principles of ACO are based on the natural behavior of ants, that in their daily life, one of the tasks that ants have to perform is search for food, in the region near of their nest. While ants are searching for food, their deposit on the ground a chemical substance called pheromone used to two main objectives: 1) a way to memorize how to back to the nest and 2) and lets a trail for that the other ants can calculate the next step decisions. The second objective is the most important part to the ants find good optmized path between the nest and the food source. The pheromone laid in the ground by the ants create a specie of network where de edges quality is relative to the amount of the pheromone deposited, this system is used probabilistically to ants takes decisions in the environment.
+
+The communication between ants is made indirect by stigmergy with the environment, if the path has large concentration of pheromone, this is probably due to its shorter length that allowed ants to travel faster, resulting in a large number of travels through the path therefore with much more ants depositing pheromone on it. Furthermore, over time the evaporation on the ground reduce the intensity of path pheromone, the evaporation make ants forgot path with low quality and increase the capacity of the ants to explore new paths. The image below gives an example of the ant system:
+
+![alt text](http://mute-net.sourceforge.net/images/ants/antDiagram3.png "Ant system")
+
 ## Canonical from of Ant Colony Optimization (ACO)
 
 ## How to used
@@ -19,3 +25,5 @@ The following image is an example of the TSP problem resolved:
 
 ## References
 [Travelling Salmesman Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
+
+[Ant Colony Optimization: a literature survey](http://wps.fep.up.pt/wps/wp474.pdf)

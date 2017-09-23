@@ -19,6 +19,31 @@ The communication between ants is made indirect by stigmergy with the environmen
 
 ## Canonical from of Ant Colony Optimization (ACO)
 
+Meanwhile, a good number of improvements were inserted in the ants system (AS) with extensions as elitism, ranking, bounding, etc. Nevertheless, the most important development is the description of the Ant Colony Optimization Metaheuristic by Dorigo and Di Caro. The canonical main part of the algorithm is given below:
+
+**1. Pseudo-code for Ant Colony Optimization**
+```
+Initialize parameters
+Initialize pheromone trails
+Create ants
+while Stopping criteria is not reached do
+    Let all ants construct their solution
+    Update pheromone trails
+    Allow Daemon Actions
+end while
+```
+
+The detail of the ACO is the Daemon Actions that can perform problem specific operations or centralized operations, which use global knowledge of the solutions. Examples of operations that can be executed in Daemon Actions are: control the feasibility of each solution, give extra pheromone quantity to the best solutions, use some local search routine to improve the solutions, etc.  
+
+ACO algorithm have some building blocks that need to be understanded, and in some cases modeled to specific problems to obtain best results. The following building blocks determine the success of the algorithm:
+
+* Method chosen to construct the solutions
+* Heuristic information
+* Pheromone updating rule
+* Transition rule and probability function
+* Parameters values
+* Termination condition
+
 ## How to used
 
 ## Conclusions

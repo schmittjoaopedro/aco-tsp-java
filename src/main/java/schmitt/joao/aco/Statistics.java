@@ -26,14 +26,19 @@ public class Statistics {
     private Visualizer visualizer;
 
     /**
+     * Current tsp file being solved
+     */
+    private String tspFile;
+    /**
      * Needs an environment and the coordinates of the vertices to be drawn
      *
      * @param environment
      * @param coordinates
      */
-    public Statistics(Environment environment, double[][] coordinates) {
+    public Statistics(String tspFile, Environment environment, double[][] coordinates) {
         this.environment = environment;
         this.visualizer = new Visualizer(coordinates);
+        this.tspFile = tspFile;
     }
 
     /**
@@ -61,16 +66,24 @@ public class Statistics {
         if(min < bestSoFar) {
             bestSoFar = min;
             bestTourSoFar = bestAnt.getTour().clone();
-            System.out.printf("Min(%.1f) Phase(%d) Max(%.1f) Mean(%.1f)\n", min, phase, max, (total / environment.getAntPopSize()));
+            String stats = String.format("%s -> Min(%.1f) Phase(%d) Max(%.1f) Mean(%.1f)\n", tspFile, min, phase, max, (total / environment.getAntPopSize()));
             String message = "[" + bestTourSoFar[0];
             for(int i = 1; i < bestTourSoFar.length - 1; i++) {
                 message += "->" + bestTourSoFar[i];
             }
             message += "]";
             System.out.println(message);
+            visualizer.setStat(stats);
             visualizer.draw(bestTourSoFar);
             try { Thread.sleep(1000); } catch (Exception ex) {}
         }
+    }
+
+    /**
+     * End visualization
+     */
+    public void close() {
+        this.visualizer.dispose();
     }
 
 }

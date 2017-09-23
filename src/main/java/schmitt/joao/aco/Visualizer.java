@@ -21,15 +21,24 @@ public class Visualizer extends JFrame {
 
     double[][] coordinates;
 
+    private JLabel stats;
+
     public Visualizer(double[][] coordinates) {
         super();
         this.coordinates = coordinates;
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.stats = new JLabel();
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.add(stats, BorderLayout.SOUTH);
+        this.setExtendedState(this.getExtendedState()|JFrame.MAXIMIZED_BOTH);
+        this.setVisible(true);
+        try { Thread.sleep(1000); } catch (Exception ex) {}
         nodes = new ArrayList<Node>();
         edges = new ArrayList<edge>();
-        viewWidth = 1200;
-        viewHeight = 700;
+        viewWidth = this.getWidth();
+        viewHeight = this.getHeight();
         width = 1;
         height = 1;
         for(int i = 0; i < coordinates.length; i++) {
@@ -40,8 +49,6 @@ public class Visualizer extends JFrame {
         scaleH = viewHeight / scaleH;
         scaleW *= .9;
         scaleH *= .9;
-        this.setSize(viewWidth + (int) scaleW, viewHeight + (int) scaleH);
-        this.setVisible(true);
     }
 
     public void draw(int[] tour) {
@@ -56,6 +63,10 @@ public class Visualizer extends JFrame {
             this.addEdge(tour[i], tour[i + 1]);
         }
         this.repaint();
+    }
+
+    public void setStat(String text) {
+        this.stats.setText(text);
     }
 
     class Node {

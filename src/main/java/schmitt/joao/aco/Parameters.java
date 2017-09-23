@@ -33,6 +33,6 @@ public class Parameters {
     /**
      * Number of iterations to find a good solution
      */
-    public static int iterationsMax = 1000;
+    public static int iterationsMax = 150;
 
 }

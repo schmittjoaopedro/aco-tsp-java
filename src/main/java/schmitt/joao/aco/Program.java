@@ -1,5 +1,8 @@
 package schmitt.joao.aco;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * ACO - Ant Colony Optimization Meta-heuristic
  *
@@ -16,12 +19,12 @@ public class Program {
     public static void main(String[] args) {
 
         String tspPath = "/home/joao/projects/master-degree/aco-tsp-algorithm/tsp/";
-        String tspFile = "lin318.tsp";
+        String tspFiles[] = {"lin318.tsp", "att532.tsp", "eil51.tsp", "pcb1173.tsp", "pr2392.tsp"};
 
         Program app = new Program();
         // Test more simulations
-        for(int i = 0; i < 1; i++) {
-            System.out.println("\nIteration " + i);
+        for(String tspFile : tspFiles) {
+            System.out.println("\nProblem: " + tspFile);
             app.startApplication(tspPath, tspFile);
         }
     }
@@ -31,7 +34,7 @@ public class Program {
 
         // Create a TSP instance from file with .tsp extension
         Environment environment = new Environment(TspReader.getDistances(path, file));
-        Statistics statistics = new Statistics(environment, TspReader.getCoordinates(path, file));
+        Statistics statistics = new Statistics(file, environment, TspReader.getCoordinates(path, file));
 
         // Startup part
         environment.generateNearestNeighborList();
@@ -46,6 +49,8 @@ public class Program {
             statistics.calculateStatistics(n);
             n++;
         }
+        try { Thread.sleep(3000); } catch (Exception ex) {}
+        statistics.close();
         System.out.println("Finished");
     }
 

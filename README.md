@@ -27,3 +27,7 @@ The communication between ants is made indirect by stigmergy with the environmen
 [Travelling Salmesman Problem](https://en.wikipedia.org/wiki/Travelling_salesman_problem)
 
 [Ant Colony Optimization: a literature survey](http://wps.fep.up.pt/wps/wp474.pdf)
+
+[Book Ant Colony Optimization](https://mitpress.mit.edu/books/ant-colony-optimization)
+
+[Aco-metaheuristic site](http://www.aco-metaheuristic.org/)
